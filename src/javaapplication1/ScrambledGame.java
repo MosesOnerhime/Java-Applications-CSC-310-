@@ -104,8 +104,6 @@ public class ScrambledGame extends javax.swing.JFrame {
     int wordCount = word.length;
     String wordCountStr = Integer.toString(wordCount);
     int score;
-    String scoreStr = Integer.toString(score);
-
     
     /**
      * Creates new form ScrambledGame
@@ -116,9 +114,6 @@ public class ScrambledGame extends javax.swing.JFrame {
         jLabel13.setText(wordCountStr.toLowerCase());
         jLabel6.setText(scramble(word[index][0]).toLowerCase());
                 
-        
-        jLabel15.setText(scoreStr.toLowerCase());
-        
     }
     
     public String scramble(String text) {
@@ -276,6 +271,11 @@ public class ScrambledGame extends javax.swing.JFrame {
         jButton5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton5.setText("GET LETTER");
         jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -431,6 +431,8 @@ public class ScrambledGame extends javax.swing.JFrame {
         String guess = jTextField2.getText().toLowerCase();
         if(guess.equalsIgnoreCase(word[index][0].toLowerCase())) {
             score++;
+            String scoreStr = Integer.toString(score);
+            jLabel15.setText(scoreStr.toLowerCase());
             JOptionPane.showMessageDialog(rootPane, "Good Job");
        } else {
        JOptionPane.showMessageDialog(rootPane, "Wrong!!! Try Again");
@@ -444,6 +446,7 @@ public class ScrambledGame extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+
 
     /**
      * @param args the command line arguments
