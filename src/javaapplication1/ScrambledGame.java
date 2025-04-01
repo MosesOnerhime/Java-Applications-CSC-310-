@@ -119,12 +119,6 @@ public class ScrambledGame extends javax.swing.JFrame {
         
         jLabel15.setText(scoreStr.toLowerCase());
         
-        timer one=new timer();
-        Thread t1=new Thread(one);
-        t1.start();
-        blinker two=new blinker();
-        Thread b1=new Thread(two);
-        b1.start();
     }
     
     public String scramble(String text) {
