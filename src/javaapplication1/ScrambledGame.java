@@ -104,6 +104,8 @@ public class ScrambledGame extends javax.swing.JFrame {
     int wordCount = word.length;
     String wordCountStr = Integer.toString(wordCount);
     int score;
+    int currentLetterPos = 0;
+    int remainingAttempts = 3;
     
     /**
      * Creates new form ScrambledGame
@@ -113,7 +115,10 @@ public class ScrambledGame extends javax.swing.JFrame {
         jLabel9.setText(wordCountStr.toLowerCase());
         jLabel13.setText(wordCountStr.toLowerCase());
         jLabel6.setText(scramble(word[index][0]).toLowerCase());
-                
+        currentLetterPos = 0;
+        remainingAttempts = 3; // Initialize attempts
+        jLabel11.setText(Integer.toString(remainingAttempts)); // Show initial attempts
+        jLabel18.setText("...");
     }
     
     public String scramble(String text) {
@@ -222,7 +227,7 @@ public class ScrambledGame extends javax.swing.JFrame {
         });
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
-        jLabel5.setText("timer");
+        jLabel5.setText(".");
         jLabel5.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 jLabel5PropertyChange(evt);
@@ -322,15 +327,15 @@ public class ScrambledGame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(49, 49, 49)
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -413,39 +418,78 @@ public class ScrambledGame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         if(word.length==index+1) {
             JOptionPane.showMessageDialog(rootPane, "This is the last word.");
         } else {
-        index++;
-        jLabel6.setText(scramble(word[index][0]).toLowerCase());
-        jLabel7.setText(" ");
-        }        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+            index++;
+            currentLetterPos = 0;
+            remainingAttempts = 3; // Reset attempts for new word
+            jLabel6.setText(scramble(word[index][0]).toLowerCase());
+            jTextField2.setText("");
+            jLabel7.setText("...");
+            jLabel18.setText("...");
+            jLabel11.setText(Integer.toString(remainingAttempts)); // Update attempts display
+            jButton5.setEnabled(true); // Re-enable button if it was disabled
+        }
+    }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         jLabel7.setText(word[index][1]);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         String guess = jTextField2.getText().toLowerCase();
         if(guess.equalsIgnoreCase(word[index][0].toLowerCase())) {
             score++;
             String scoreStr = Integer.toString(score);
             jLabel15.setText(scoreStr.toLowerCase());
-            JOptionPane.showMessageDialog(rootPane, "Good Job");
-       } else {
-       JOptionPane.showMessageDialog(rootPane, "Wrong!!! Try Again");
-       }        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+            JOptionPane.showMessageDialog(rootPane, "<html><font color='blue'>Good job! Your answer is correct.</font></html>");
+            
+            // Automatically move to next word if not the last word
+            if (index < word.length - 1) {
+                jButton2ActionPerformed(null); // This will reset attempts
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "<html><font color='blue'>Congratulations! You've completed all words!</font></html>");
+                JOptionPane.showMessageDialog(rootPane, "<html><font color='blue'>Game complete! Final score: " + 
+            score + "/" + wordCount + "</font></html>");
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "<html><font color='red'>Wrong!!! Try Again</font></html>");
+        }
+        jTextField2.setText(""); // Clear the input field
+    }                                       
 
-    private void jLabel5PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jLabel5PropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel5PropertyChange
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        if (remainingAttempts > 0) {
+            // Get the current word
+            String currentWord = word[index][0];
+            
+            // Check if we haven't shown all letters yet
+            if (currentLetterPos < currentWord.length()) {
+                // Get the next letter
+                char nextLetter = currentWord.charAt(currentLetterPos);
+                // Update the label with the letter
+                jLabel18.setText(String.valueOf(nextLetter).toLowerCase());
+                // Move to the next position
+                currentLetterPos++;
+                
+                // Decrement attempts and update display
+                remainingAttempts--;
+                jLabel11.setText(Integer.toString(remainingAttempts));
+                
+                // Disable button if no attempts left
+                if (remainingAttempts == 0) {
+                    jButton5.setEnabled(false);
+                }
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "All letters have been revealed!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "No more attempts left for this word!");
+        }
+    }
 
 
     /**
